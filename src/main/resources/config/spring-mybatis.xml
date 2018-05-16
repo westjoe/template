@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<context:property-placeholder location="classpath:db_properties/db.properties" />
+
+	<context:component-scan base-package="org.g7e.common" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/> 
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+
+	<!-- dataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close" p:url="${druid.url}"
+		p:username="${druid.username}" p:password="${druid.password}"
+		p:initialSize="${druid.initialSize}" p:minIdle="${druid.minIdle}"
+		p:maxActive="${druid.maxActive}" p:maxWait="${druid.maxWait}"
+		p:timeBetweenEvictionRunsMillis="${druid.timeBetweenEvictionRunsMillis}"
+		p:minEvictableIdleTimeMillis="${druid.minEvictableIdleTimeMillis}"
+		p:validationQuery="${druid.validationQuery}" p:testWhileIdle="${druid.testWhileIdle}"
+		p:testOnBorrow="${druid.testOnBorrow}" p:testOnReturn="${druid.testOnReturn}"
+		p:poolPreparedStatements="${druid.poolPreparedStatements}"
+		p:maxPoolPreparedStatementPerConnectionSize="${druid.maxPoolPreparedStatementPerConnectionSize}">
+	</bean>
+
+	<bean id="mybatisSqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:configLocation="classpath:config/mybatis-config.xml"
+		p:typeAliasesPackage="person.joe.po" p:mapperLocations="classpath:dao/org/g7e/common/*/*Dao.xml"
+		p:dataSource-ref="dataSource" />
+
+	<!-- 配置Mapper扫描路径 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:basePackage="person.joe.dao"/>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource" />
+
+	<!-- 启用事务注解 -->
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+
+	<!-- 配置事务属性 -->
+	<!-- propagation:REQUIRES(默认的)：如果有事务在运行，当前的方法就在这个事务内运行，否则就启动一个新的事务并在自己的事务内运行 -->
+	<!-- propagation:REQUIRES_NEW：当前的事务必须启动新事务，并在它自己的事务内运行，如果有事务正在运行，应该将它挂起 -->
+	<!-- read-only="true"在查询语句中设置只读 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" />
+			<tx:method name="save*" />
+			<tx:method name="delete*" />
+			<tx:method name="remove*" />
+			<tx:method name="modify*" />
+			<tx:method name="update*" />
+			<!-- 以下查询统一设置只读，5秒超时(以get,load,find,search,select等开头) -->
+			<!-- 如果查询超过七秒，说明程序需要优化，太久导致用户交互差 -->
+			<tx:method name="find*" read-only="true" timeout="7" />
+			<tx:method name="get*" read-only="true" timeout="7" />
+			<tx:method name="load*" read-only="true" timeout="7" />
+			<tx:method name="query*" read-only="true" timeout="7" />
+			<tx:method name="search*" read-only="true" timeout="7" />
+			<tx:method name="select*" read-only="true" timeout="7" />
+			<!-- 没有以上面方法名开头的，统一不开事务 -->
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 配置关联事务切入点和事务属性 -->
+	<aop:config>
+		<aop:advisor advice-ref="txAdvice"
+			pointcut="execution(* person.joe.service.*.*(..))" />
+	</aop:config>
+
+</beans>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!-- 用于指定一个需要在配置中解析使用的外部属性文件 -->
+  <properties resource="GeneratorConfig/generatorConfig.properties" />
+
+  <!-- 驱动包路径 -->
+  <classPathEntry location="${db.classPathEntry}" />
+
+  <context id="MySQLTables" targetRuntime="MyBatis3">
+    <!-- 定义注释生成器的属性 -->
+    <commentGenerator>
+      <property name="suppressAllComments" value="true" /><!-- 这个属性用来指定MBG生成的代码中是否包含任何注释。true不生成 -->
+    </commentGenerator>
+
+    <!-- 数据库连接信息 -->
+    <jdbcConnection connectionURL="${jdbc.connectionURL}" driverClass="${jdbc.driverClass}" password="${jdbc.password}" userId="${jdbc.userId}" />
+
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <!-- 生成Model类存放位置 -->
+    <javaModelGenerator targetPackage="${targetPackage.model}" targetProject="${targetProject.dir}">
+      <property name="enableSubPackages" value="false" /><!-- 是否在当前路径下新加一层schema -->
+      <property name="trimStrings" value="false" /><!-- 是否针对string类型的字段在set的时候进行trim调用 -->
+    </javaModelGenerator>
+
+    <!-- 生成映射文件存放位置 -->
+    <sqlMapGenerator targetPackage="${targetPackage.dao}" targetProject="${targetProject.dir}">
+      <property name="enableSubPackages" value="false" /><!-- 是否在当前路径下新加一层schema -->
+    </sqlMapGenerator>
+
+    <!-- 生成Dao类存放位置 -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="${targetPackage.dao}" targetProject="${targetProject.dir}">
+      <property name="enableSubPackages" value="false" /><!-- 是否在当前路径下新加一层schema -->
+    </javaClientGenerator>
+
+    <table tableName="w_goods_property" domainObjectName="GoodsProperty" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <!-- 生成对应表及类名 -->
+    <!-- <table tableName="w_user" domainObjectName="User" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_address" domainObjectName="Address" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_admin" domainObjectName="Admin" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_cart" domainObjectName="Cart" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_collect" domainObjectName="Collect" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_goods_gallery" domainObjectName="GoodsGallery" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_order_goods" domainObjectName="OrderGoods" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_platform" domainObjectName="Platform" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_goods" domainObjectName="Goods" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+    <table tableName="w_order" domainObjectName="Order" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false"/>
+  -->  
+  </context>
+
+</generatorConfiguration>

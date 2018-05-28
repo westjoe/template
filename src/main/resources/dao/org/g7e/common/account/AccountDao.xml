@@ -121,7 +121,7 @@
     </trim>
   </insert>
   
-  <select id="findIdByUsername">
+  <select id="findIdByUsername" resultType="int">
   	SELECT id FROM w_user WHERE username = #{openId,jdbcType=VARCHAR} 
   </select>
 </mapper>

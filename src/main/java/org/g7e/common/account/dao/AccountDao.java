@@ -1,4 +1,8 @@
 package org.g7e.common.account.dao;
+
+import org.apache.ibatis.annotations.Param;
+import org.g7e.common.account.vo.AccountVo;
+
 /***
  * 
  * @ClassName: AccountDao
@@ -8,4 +12,7 @@ package org.g7e.common.account.dao;
  */
 public interface AccountDao {
 
+	AccountVo getUserInfo();
+	
+	int findIdByUsername(@Param("openId") String openId);
 }

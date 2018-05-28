@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.g7e.common.account.dao.AccountDao">
+  <resultMap id="BaseResultMap" type="org.g7e.common.account.vo.AccountVo">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="password_salt" jdbcType="VARCHAR" property="passwordSalt" />
+    <result column="gender" jdbcType="BIT" property="gender" />
+    <result column="birthday" jdbcType="INTEGER" property="birthday" />
+    <result column="register_time" jdbcType="INTEGER" property="registerTime" />
+    <result column="last_login_time" jdbcType="INTEGER" property="lastLoginTime" />
+    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="register_ip" jdbcType="VARCHAR" property="registerIp" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+  </resultMap>
+  <insert id="insert" parameterType="org.g7e.common.account.vo.AccountVo">
+    insert into w_user (id, username, password, 
+      password_salt, gender, birthday, 
+      register_time, last_login_time, last_login_ip, 
+      nickname, mobile, register_ip, 
+      avatar,is_delete)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{passwordSalt,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, #{birthday,jdbcType=INTEGER}, 
+      #{registerTime,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=INTEGER}, #{lastLoginIp,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{registerIp,jdbcType=VARCHAR}, 
+      #{avatar,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="org.g7e.common.account.vo.AccountVo">
+    insert into w_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="passwordSalt != null">
+        password_salt,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="registerTime != null">
+        register_time,
+      </if>
+      <if test="lastLoginTime != null">
+        last_login_time,
+      </if>
+      <if test="lastLoginIp != null">
+        last_login_ip,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="registerIp != null">
+        register_ip,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="passwordSalt != null">
+        #{passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=INTEGER},
+      </if>
+      <if test="registerTime != null">
+        #{registerTime,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginTime != null">
+        #{lastLoginTime,jdbcType=INTEGER},
+      </if>
+      <if test="lastLoginIp != null">
+        #{lastLoginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="registerIp != null">
+        #{registerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=INTEGER},
+      </if>      
+    </trim>
+  </insert>
+  
+  <select id="findIdByUsername">
+  	SELECT id FROM w_user WHERE username = #{openId,jdbcType=VARCHAR} 
+  </select>
+</mapper>

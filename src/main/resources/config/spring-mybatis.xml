@@ -33,12 +33,12 @@
 
 	<bean id="mybatisSqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean"
 		p:configLocation="classpath:config/mybatis-config.xml"
-		p:typeAliasesPackage="person.joe.po" p:mapperLocations="classpath:dao/org/g7e/common/*/*Dao.xml"
+		p:mapperLocations="classpath:dao/org/g7e/common/*/*Dao.xml"
 		p:dataSource-ref="dataSource" />
 
 	<!-- 配置Mapper扫描路径 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-		p:basePackage="person.joe.dao"/>
+		p:basePackage="org.g7e.**.**.dao"/>
 
 	<!-- 配置事务管理器 -->
 	<bean id="transactionManager"
@@ -60,6 +60,7 @@
 			<tx:method name="remove*" />
 			<tx:method name="modify*" />
 			<tx:method name="update*" />
+			<tx:method name="add*" />
 			<!-- 以下查询统一设置只读，5秒超时(以get,load,find,search,select等开头) -->
 			<!-- 如果查询超过七秒，说明程序需要优化，太久导致用户交互差 -->
 			<tx:method name="find*" read-only="true" timeout="7" />
@@ -74,8 +75,8 @@
 
 	<!-- 配置关联事务切入点和事务属性 -->
 	<aop:config>
-		<aop:advisor advice-ref="txAdvice"
-			pointcut="execution(* person.joe.service.*.*(..))" />
+	    <aop:pointcut id="allManagerMethod" expression="execution(* org.g7e.common.account.biz.*.*(..)) or execution(* org.g7e.store.biz.*.*(..))"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod"/>
 	</aop:config>
 
 </beans>
